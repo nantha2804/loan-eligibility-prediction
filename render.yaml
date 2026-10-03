@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: loan-eligibility-prediction
+    runtime: python
+    buildCommand: uv sync --locked --no-dev
+    startCommand: uv run --no-sync gunicorn --bind 0.0.0.0:$PORT app:app
+    healthCheckPath: /health
