@@ -1,36 +1,98 @@
 # Loan Eligibility Prediction
 
-A Flask web app and JSON API that predicts loan eligibility from the included applicant dataset. The scikit-learn pipeline imputes missing values, one-hot encodes categorical fields, scales numeric fields, and trains an SVM classifier. `Loan_ID` is excluded because it is only an identifier.
+A machine learning web application that predicts loan eligibility based on applicant information. The application uses a Scikit-learn pipeline with data preprocessing and an SVM classifier, and provides a Flask web interface and REST API.
 
-> This is an educational machine-learning demo, not financial advice, a credit assessment, or an automated lending decision.
+## 🚀 Live Demo
 
-## Stack
+**Render:** https://loan-eligibility-prediction-uwj0.onrender.com
 
-Python, uv, Pandas, NumPy (through Pandas/scikit-learn), scikit-learn, Flask, Gunicorn, Docker, GitHub Actions, and Render.
+## 📌 GitHub Repository
 
-## Run locally
+**GitHub:** https://github.com/nantha2804/loan-eligibility-prediction
 
-Install [uv](https://docs.astral.sh/uv/) and Python 3.10 or later, then run:
+## ✨ Features
 
-```bash
-uv sync
-uv run flask --app app run --debug
+* Loan eligibility prediction using Machine Learning
+* Flask web application
+* REST API for predictions
+* Data preprocessing using Scikit-learn
+* Missing-value handling
+* Categorical feature encoding
+* Numerical feature scaling
+* SVM classification
+* Input validation
+* Health-check endpoint
+* Automated tests with Pytest
+* UV-based dependency management
+* Deployment on Render
+
+## 🛠️ Technologies Used
+
+* Python
+* Pandas
+* Scikit-learn
+* Flask
+* Gunicorn
+* Pytest
+* uv
+* Git & GitHub
+* Render
+
+## 🤖 Machine Learning
+
+The application uses an SVM classifier to predict the `Loan_Status` target.
+
+### Preprocessing
+
+* Numerical missing values → Median imputation
+* Categorical missing values → Most-frequent imputation
+* Categorical features → One-hot encoding
+* Numerical features → Standard scaling
+* Class imbalance → Balanced class weights
+
+The model uses a stratified 80/20 train-test split for evaluation and is then retrained on the complete dataset for deployment.
+
+## 📊 Input Features
+
+The prediction model uses:
+
+* Gender
+* Married
+* Dependents
+* Education
+* Self_Employed
+* ApplicantIncome
+* CoapplicantIncome
+* LoanAmount
+* Loan_Amount_Term
+* Credit_History
+* Property_Area
+
+`Loan_ID` is excluded because it is only an identifier.
+
+## 🌐 API Endpoints
+
+### Health Check
+
+```text
+GET /health
 ```
 
-Open <http://127.0.0.1:5000>. The model is trained from `LoanData.csv` on the first prediction request. To run the test suite:
+Example response:
 
-```bash
-uv run pytest
+```json
+{
+  "status": "ok"
+}
 ```
 
-To install the original notebook's analysis dependencies as well:
+### Loan Prediction
 
-```bash
-uv sync --extra notebook
-uv run jupyter notebook
+```text
+POST /predict
 ```
 
-The prediction API accepts JSON at `POST /predict`:
+Example request:
 
 ```json
 {
@@ -48,35 +110,79 @@ The prediction API accepts JSON at `POST /predict`:
 }
 ```
 
-The response contains the model class (`Y` or `N`) and a readable eligibility label. `GET /health` is available for health checks. Invalid or incomplete input receives a `400` JSON response.
-`requirements.txt` is a pip-compatible export of the uv lockfile and includes the notebook extra.
-Regenerate it after dependency changes with `uv export --locked --all-extras --no-hashes --format requirements-txt --output-file requirements.txt`.
+Example response:
 
-## Docker
-
-Build and run the container:
-
-```bash
-docker build -t loan-eligibility-prediction .
-docker run --rm -p 8000:8000 loan-eligibility-prediction
+```json
+{
+  "prediction": "Y",
+  "eligibility": "Eligible"
+}
 ```
 
-Open <http://localhost:8000>. The container uses the committed `uv.lock` for reproducible dependency installation and runs Gunicorn as a non-root user.
+## 💻 Run Locally
 
-## Deploy to Render
+### 1. Clone the repository
 
-1. Push this repository to GitHub.
-2. In Render, choose **New + → Blueprint** and connect the repository.
-3. Render reads `render.yaml`, syncs the locked dependencies with uv, starts Gunicorn, and checks `/health`.
+```bash
+git clone https://github.com/nantha2804/loan-eligibility-prediction.git
+cd loan-eligibility-prediction
+```
 
-## GitHub Actions
+### 2. Install dependencies
 
-The workflow in `.github/workflows/ci.yml` runs the tests on pushes and pull requests. Dependencies are defined in `pyproject.toml` and resolved in `uv.lock`.
+Make sure `uv` is installed, then run:
 
-## Dataset and evaluation
+```bash
+uv sync
+```
 
-`LoanData.csv` contains applicant attributes and the historical `Loan_Status` target (`Y`/`N`). The training pipeline uses a stratified 80/20 holdout split to calculate accuracy and balanced accuracy, then retrains the deployment model on the full dataset. The notebook preserves the exploratory analysis and experiments.
+### 3. Start the Flask application
 
-## Author
+```bash
+uv run flask --app app run --debug
+```
 
-Nantha Kumar
+Open:
+
+```text
+http://127.0.0.1:5000
+```
+
+### 4. Run tests
+
+```bash
+uv run pytest
+```
+
+## 📁 Project Structure
+
+```text
+loan-eligibility-prediction/
+│
+├── app.py
+├── model.py
+├── LoanData.csv
+├── cleaned.xlsx
+├── templates/
+│   └── index.html
+├── tests/
+│   └── test_app.py
+├── Loan Eligible Status Project.ipynb
+├── pyproject.toml
+├── uv.lock
+├── render.yaml
+├── Dockerfile
+├── .gitignore
+└── README.md
+```
+
+## ⚠️ Disclaimer
+
+This project is an educational machine-learning demonstration. It is not financial advice, a credit assessment, or an automated lending decision.
+
+## 👨‍💻 Author
+
+**Nantha Kumar**
+
+Computer Science Graduate
+Generative AI & Agentic AI | Python | Machine Learning
